@@ -4,9 +4,9 @@ import psycopg2
 
 
 def postquery(text):
-    connection = psycopg2.connect("host=localhost dbname=messages user=postgres password=branbran")
+    connection = psycopg2.connect("host=localhost dbname=chatbot_api user=postgres")
     cursor = connection.cursor()
-    cursor.execute("select * from sample where tag1 LIKE '%%%s%%' or tag2 LIKE '%%%s%%' or tag3 LIKE '%%%s%%'" % (text, text, text))
+    cursor.execute("select * from messages where tag1 LIKE '%%%s%%' or tag2 LIKE '%%%s%%' or tag3 LIKE '%%%s%%'" % (text, text, text))
     res = cursor.fetchall()
 
     if len(res) == 0:
