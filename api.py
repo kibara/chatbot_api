@@ -10,7 +10,7 @@ class ItemsResource:
     def on_get(self, req, resp):
         items = {}
         contents = {}
-        if 'key' in req.params:
+        if ('key' in req.params) and (req.params['key'] not in ('\'', '_', '%', '#', '&')):
             value = req.params['key']
             res = dbaccess.postquery(value)
             i = random.randint(0, len(res) - 1)  # DBでHITした内容が複数あったら、
@@ -33,7 +33,7 @@ class ItemsResource:
         else:
             # contents
             contents['type'] = 'Error'
-            contents['description'] = 'your request key is empty'
+            contents['description'] = 'your request key is empty or invalid'
             contents['value'] = 'InputError'
 
             # items
@@ -71,8 +71,8 @@ class ItemsResource:
 api = falcon.API()
 api.add_route('/test_api', ItemsResource())
 
-#if __name__ == "__main__":
-#    from wsgiref import simple_server
-#
-#    httpd = simple_server.make_server("127.0.0.1", 8008, api)
-#    httpd.serve_forever()
+if __name__ == "__main__":
+    from wsgiref import simple_server
+
+    httpd = simple_server.make_server("127.0.0.1", 8008, api)
+    httpd.serve_forever()
