@@ -12,7 +12,7 @@ class ItemsResource:
         contents = {}
         if ('key' in req.params) and (req.params['key'] not in ('\'', '_', '%', '#', '&')):
             value = req.params['key']
-            res = dbaccess.postquery(value)
+            res = dbaccess.post_query(value)
             i = random.randint(0, len(res) - 1)  # DBでHITした内容が複数あったら、
                                                  # 単純なランダムで1つ返す
 
@@ -31,10 +31,13 @@ class ItemsResource:
             resp.status = falcon.HTTP_200
 
         else:
+            res = dbaccess.ng_query('ng001')  # NG時のコメント
+            print(res)
+
             # contents
             contents['type'] = 'Error'
             contents['description'] = 'your request key is empty or invalid'
-            contents['value'] = 'InputError'
+            contents['value'] = res[0][3]
 
             # items
             items['status'] = 'fail'
@@ -63,9 +66,9 @@ class ItemsResource:
 #                }
 #            ]
 #        }
-        resp.status = falcon.HTTP_200
-        resp.content_type = 'text/plain; charset=utf-8'
-        resp.body = json.dumps(items, ensure_ascii=False)
+#        resp.status = falcon.HTTP_200
+#        resp.content_type = 'text/plain; charset=utf-8'
+#        resp.body = json.dumps(items, ensure_ascii=False)
 
 
 api = falcon.API()
